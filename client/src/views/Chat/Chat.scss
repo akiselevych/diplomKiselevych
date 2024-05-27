@@ -1,0 +1,251 @@
+/* stylelint-disable-next-line scss/at-import-partial-extension */
+@import '../../styles/variables/colors';
+/* stylelint-disable-next-line scss/at-import-partial-extension */
+@import '../../styles/mixins/common';
+/* stylelint-disable-next-line scss/at-import-partial-extension */
+@import '../../index.scss';
+/* stylelint-disable-next-line scss/at-import-partial-extension */
+@import '../../styles/mixins/breakpoints';
+
+/* ---   Chat   --- */
+
+.chat-container {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.message-container {
+  // width: 800px;
+  // max-width: 90%;
+  height: calc(100svh - 120px);
+  overflow-y: scroll;
+  margin: 30px auto;
+  //border: 0 solid #ccc;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  border: 1px solid #ccc;
+}
+
+.chat-messages {
+  // overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  font-size: 16px;
+}
+
+.avatar-img {
+  width: 40px;
+  border-radius: 20px;
+}
+
+.chat-input {
+  border: 1px solid #000;
+  border-radius: 15px;
+}
+
+.chat-input input {
+  width: 70%;
+  padding: 5px 10px;
+  margin-top: 10px;
+  background-color: #f1f2f6;
+  border: none;
+  height: 2em;
+  border-radius: 1.5em;
+  font-size: 16px;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+/* ---   ChatList   --- */
+
+.chats {
+  // width: 500px;
+  height: calc(100dvh - 56px);
+
+  .chat-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+    padding-right: 5px;
+
+    .no-chats {
+      font-size: 24px;
+      text-align: center;
+      opacity: 0.5;
+    }
+  }
+
+  .add-chat {
+    padding: 20px;
+    width: 70px;
+    cursor: pointer;
+    transition: color 0.5s ease;
+    border-radius: 40px;
+
+    &__plus {
+      width: 30px;
+      height: 30px;
+    }
+
+    &:hover {
+      background-color: #999;
+    }
+  }
+
+  .chat-item {
+    width: 100%;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+
+    &:hover {
+      background-color: #d2d6de;
+    }
+
+    h3 {
+      font-size: 20px;
+      font-weight: 600;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .chat-options {
+      position: absolute;
+      top: 25%;
+      right: 0;
+      padding-right: 3px;
+      display: block;
+
+      .chat-options-option {
+        @include message-option;
+      }
+    }
+  }
+}
+
+.chatmodal-search-friends-input {
+  width: 70%;
+}
+
+@keyframes moveStripes {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -40px 100px;
+  }
+}
+
+.chat-modal-no-friends_wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 80svh;
+  border-radius: 20px;
+  position: relative;
+  width: 100%;
+  background: linear-gradient(180deg, #f1f2f6 0%, #dbe5ff 70%);
+  overflow: hidden;
+  > div {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    p {
+      font-size: 18px;
+      font-weight: 600;
+    }
+  }
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.1),
+      rgba(255, 255, 255, 0.1) 10px,
+      transparent 10px,
+      transparent 20px
+    );
+    background-size: 100% 100%;
+    animation: moveStripes 4s linear infinite;
+    will-change: background-position;
+    z-index: 0;
+  }
+
+  @include media('sm') {
+    height: 40svh;
+  }
+}
+
+.chat-modal-no-friends_wrapper_list {
+  list-style: disc;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  z-index: 2;
+}
+
+.chat-modal-button {
+  background: none;
+  border-radius: 20px;
+  width: 100%;
+  padding: 8px 30px 8px 10px;
+  transition: 0.3s color ease;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  &:hover {
+    color: #0084ff;
+    cursor: pointer;
+    transition: 0.3s color ease;
+  }
+}
+
+.friends-wrapper {
+  display: grid;
+  align-content: start;
+  gap: 15px;
+  padding: 0px 20px 20px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.mt20 {
+  margin-top: 20px;
+}
+
+.active-link {
+  background-color: #dbe5ff;
+}
+
+.modal-item-wrapper {
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  background-color: #f1f2f6;
+  height: fit-content;
+}
+
+.modal-avatar-img {
+  width: 40px;
+  border-radius: 20px;
+}

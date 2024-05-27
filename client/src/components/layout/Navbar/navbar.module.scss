@@ -1,0 +1,149 @@
+@use "../../../styles/variables/colors";
+@use "../../../styles/mixins/common";
+@import '../../../styles/mixins/breakpoints';
+
+.header {
+  position: sticky;
+  top: 0;
+  background-color: colors.$white;
+  display: flex;
+  // padding-left: 16px;
+  align-items: center;
+  z-index: 1201;
+  @include common.shadow();
+}
+
+.activeLink {
+  color: colors.$primaryButtonBackground;
+  font-size: 24px;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    width: 100px;
+    height: 2px;
+    border-radius: 50px;
+    background-color: colors.$primaryButtonBackground;
+  }
+}
+
+.defaultLink {
+  color: #000;
+  font-size: 24px;
+}
+
+.navWrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 5px 16px 5px 0;
+}
+
+@media (max-width: 900px) {
+  .navWrapper {
+    justify-content: flex-end;
+  }
+
+  .navLinkList {
+    display: flex;
+  }
+}
+
+.navLinkList {
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+  height: 100%;
+  @include media(xs) {
+    display: none;
+  }
+  @include media(md) {
+    display: flex;
+  }
+
+  & li {
+    height: 100%;
+
+    & > a {
+      min-width: 112px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      padding: 10px 0px;
+      border-radius: 10px;
+      @include common.transition(background-color);
+
+      &:hover {
+        background-color: colors.$lightGrey;
+      }
+    }
+  }
+}
+
+.actionList {
+  display: flex;
+  margin-left: auto;
+  @include media(sm) {
+    margin-left: 0;
+  }
+}
+
+.messengerButton {
+  @include common.transition();
+  margin-right: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50px;
+  border: none;
+  @include common.transition(background-color);
+
+  & svg {
+    width: 88%;
+    height: 88%;
+    color: colors.$black;
+  }
+
+  &.messengerButtonActive {
+    background-color: rgba(colors.$primaryButtonBackground, 0.2);
+
+    & svg {
+      width: 88%;
+      height: 88%;
+      color: colors.$primaryButtonBackground;
+    }
+  }
+}
+
+.main-link-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin: 16px 16px 0;
+}
+
+.main-link {
+  margin-block: 4px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid transparent;
+  padding: 8px;
+  border-radius: 8px;
+  &:hover {
+    background-color: colors.$lightGrey;
+  }
+  & a {
+    font-weight: 700;
+  }
+}
+
+.mobileSearch {
+  position: relative;
+  z-index: 1;
+  margin: 16px 16px 0;
+  padding: 8px;
+}

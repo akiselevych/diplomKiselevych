@@ -1,0 +1,108 @@
+jwt:
+  secret:
+    access: ${JWT_SECRET_ACCESS}
+    refresh: ${JWT_SECRET_REFRESH}
+server:
+  port: 9000
+  forward-headers-strategy: framework
+springdoc:
+  swagger-ui:
+    tags-sorter: alpha
+    operations-sorter: alpha
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_OAUTH_CLIENT_ID}
+            client-secret: ${GOOGLE_OAUTH_SECRET_KEY}
+            scope: openid,profile,email
+---
+spring:
+  profiles:
+    active: dev
+---
+sentry:
+  dsn: https://254fdac55ecd748213645932e382766a@o4507007176867840.ingest.us.sentry.io/4507007238471680
+  traces-sample-rate: 1.0
+spring:
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:db/data-h2.sql
+      schema-locations: classpath:db/schema-h2.sql
+  h2:
+    console:
+      enabled: true
+  datasource:
+    url: jdbc:h2:mem:isocial
+    username: admin
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: false
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL_ADDRESS}
+    password: ${EMAIL_PASSWORD}
+    protocol: smtp
+    tls: true
+    properties.mail.smtp:
+        auth: true
+        starttls.enable: true
+        ssl.trust: smtp.gmail.com
+
+  config:
+    activate:
+      on-profile: dev
+---
+---
+sentry:
+  dsn: https://254fdac55ecd748213645932e382766a@o4507007176867840.ingest.us.sentry.io/4507007238471680
+  traces-sample-rate: 0.6
+spring:
+  flyway:
+    enabled: false
+  sql:
+    init:
+      mode: never
+      schema-locations: classpath:db/schema-postgres.sql
+#      data-locations: classpath:db/data-postgres.sql
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    open-in-view: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        generate_statistics: false
+    show-sql: false
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL_ADDRESS}
+    password: ${EMAIL_PASSWORD}
+    protocol: smtp
+    tls: true
+    properties.mail.smtp:
+      auth: true
+      starttls.enable: true
+      ssl.trust: smtp.gmail.com
+  config:
+    activate:
+      on-profile: prod

@@ -1,0 +1,242 @@
+DROP TABLE IF EXISTS users;
+CREATE TABLE public.users
+(
+    id                 INT AUTO_INCREMENT PRIMARY KEY,
+    first_name         VARCHAR(250) NOT NULL,
+    last_name          VARCHAR(250),
+    email              VARCHAR(250) NOT NULL,
+    city               VARCHAR(250),
+    password           VARCHAR(250),
+    avatars_url        VARCHAR ARRAY,
+    banner_url         VARCHAR,
+    bio                VARCHAR,
+    birth_place        VARCHAR,
+    study_place        VARCHAR,
+    is_private         BOOLEAN      NOT NULL DEFAULT FALSE,
+    is_volunteer       BOOLEAN      NOT NULL DEFAULT FALSE,
+    last_seen          TIMESTAMP,
+    activity_status    VARCHAR(10)  NOT NULL DEFAULT 'OFFLINE',
+    gender             VARCHAR(20)  NOT NULL,
+    date_of_birth      DATE,
+    creation_date      TIMESTAMP,
+    last_modified_date TIMESTAMP,
+    is_premium         BOOLEAN      NOT NULL DEFAULT FALSE,
+    premium_nickname   VARCHAR(250),
+    premium_emoji      VARCHAR(250),
+    is_active          BOOLEAN      NOT NULL DEFAULT FALSE
+);
+
+DROP TABLE IF EXISTS volunteers;
+CREATE TABLE public.volunteers
+(
+    id                 INT AUTO_INCREMENT PRIMARY KEY,
+    user_id            INT,
+    creation_date      TIMESTAMP,
+    last_modified_date TIMESTAMP,
+    is_active          BOOLEAN NOT NULL DEFAULT FALSE,
+    FOREIGN KEY (user_id) REFERENCES public.users (id)
+);
+
+
+DROP TABLE IF EXISTS roles;
+CREATE TABLE public.roles
+(
+    id      INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT         NOT NULL,
+    name    VARCHAR(50) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES public.users (id)
+);
+
+DROP TABLE IF EXISTS chats;
+CREATE TABLE public.chats
+(
+    id                 INT AUTO_INCREMENT PRIMARY KEY,
+    last_message       VARCHAR(1000),
+    last_message_by    INT,
+    last_message_date  TIMESTAMP,
+    creation_date      TIMESTAMP,
+    last_modified_date TIMESTAMP,
+    is_active          BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+DROP TABLE IF EXISTS messages;
+CREATE TABLE public.messages
+(
+    id                 INT AUTO_INCREMENT PRIMARY KEY,
+    chat_id            INT,
+    sender_id          INT,
+    status             VARCHAR(50) NOT NULL DEFAULT 'SENT',
+    text               VARCHAR(1000),
+    attachments        VARCHAR ARRAY,
+    is_edited          BOOLEAN,
+    creation_date      TIMESTAMP,
+    last_modified_date TIMESTAMP,
+    is_active          BOOLEAN     NOT NULL DEFAULT FALSE,
+    FOREIGN KEY (chat_id) REFERENCES public.chats (id),
+    FOREIGN KEY (sender_id) REFERENCES public.users (id)
+);
+
+DROP TABLE IF EXISTS users_chats;
+CREATE TABLE public.users_chats
+(
+    id      INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    chat_id INT,
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (chat_id) REFERENCES chats (id)
+);
+DROP TABLE IF EXISTS friends;
+CREATE TABLE friends
+(
+    id                 INT AUTO_INCREMENT PRIMARY KEY,
+    requester_id       INT,
+    addresser_id       INT,
+    status             VARCHAR(255),
+    FOREIGN KEY (requester_id) REFERENCES public.users (id),
+    FOREIGN KEY (addresser_id) REFERENCES public.users (id),
+    creation_date      TIMESTAMP,
+    last_modified_date TIMESTAMP,
+    is_active          BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+DROP TABLE IF EXISTS subscriptions;
+CREATE TABLE public.subscriptions
+(
+
+    id                 INT AUTO_INCREMENT PRIMARY KEY,
+    user_id            INT,
+    subscriber_id      INT,
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (subscriber_id) REFERENCES users (id),
+    creation_date      TIMESTAMP,
+    last_modified_date TIMESTAMP,
+    is_active          BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+DROP TABLE IF EXISTS comments;
+CREATE TABLE public.comments
+(
+    id                 INT AUTO_INCREMENT PRIMARY KEY,
+    commenter_id       INT     NOT NULL,
+    post_id            INT     NOT NULL,
+    text               VARCHAR(1000),
+    creation_date      TIMESTAMP,
+    last_modified_date TIMESTAMP,
+    is_active          BOOLEAN NOT NULL DEFAULT FALSE,
+    is_edited          BOOLEAN NOT NULL DEFAULT FALSE
+);
+DROP TABLE IF EXISTS posts;
+CREATE TABLE public.posts
+(
+    id                 INT AUTO_INCREMENT PRIMARY KEY,
+    text_content       VARCHAR(1000),
+    attachments        VARCHAR ARRAY,
+    is_edited          BOOLEAN NOT NULL DEFAULT FALSE,
+    original_post_id   INT,
+    user_id            INT REFERENCES users (id),
+    creation_date      TIMESTAMP,
+    last_modified_date TIMESTAMP,
+    is_active          BOOLEAN NOT NULL DEFAULT FALSE
+);
+DROP TABLE IF EXISTS favorites;
+CREATE TABLE public.favorites
+(
+    id                 INT AUTO_INCREMENT PRIMARY KEY,
+    selected_post_id   INT,
+    user_selector_id   INT REFERENCES users (id),
+    creation_date      TIMESTAMP,
+    last_modified_date TIMESTAMP,
+    is_active          BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+DROP TABLE IF EXISTS subscribers;
+CREATE TABLE public.subscribers
+(
+    id                 INT AUTO_INCREMENT PRIMARY KEY,
+    user_id            INT,
+    subscriber_id      INT,
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (subscriber_id) REFERENCES users (id),
+    creation_date      TIMESTAMP,
+    last_modified_date TIMESTAMP,
+    is_active          BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+DROP TABLE IF EXISTS likes;
+CREATE TABLE likes
+(
+    id                 BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id            BIGINT       NOT NULL,
+    entity_id          BIGINT       NOT NULL,
+    entity_type        VARCHAR(255) NOT NULL,
+    creation_date      TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    last_modified_date TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    is_active          BOOLEAN      NOT NULL DEFAULT TRUE
+);
+
+DROP TABLE IF EXISTS notifications;
+CREATE TABLE notifications
+(
+    id                 BIGINT AUTO_INCREMENT PRIMARY KEY,
+    receiver_id        BIGINT       NOT NULL,
+    sender_id          BIGINT       NOT NULL,
+    entity_id          BIGINT       NOT NULL,
+    event_type         VARCHAR(100) NOT NULL,
+    sender_avatar      VARCHAR(250) NOT NULL,
+    sender_name        VARCHAR(250) NOT NULL,
+    creation_date      TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    last_modified_date TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    is_active          BOOLEAN      NOT NULL DEFAULT TRUE
+);
+
+DROP TABLE IF EXISTS post_seen;
+CREATE TABLE post_seen
+(
+    id                 BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id            BIGINT    NOT NULL,
+    post_id            BIGINT    NOT NULL,
+    creation_date      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    last_modified_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    is_active          BOOLEAN   NOT NULL DEFAULT TRUE
+);
+
+CREATE TABLE user_preferences
+(
+    id                      BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id                 BIGINT UNIQUE NOT NULL,
+    friends_list_visibility VARCHAR(255)  NOT NULL DEFAULT 'ALL',
+    age_visibility          VARCHAR(255)  NOT NULL DEFAULT 'ALL',
+    posts_visibility        VARCHAR(255)  NOT NULL DEFAULT 'ALL',
+    receive_notifications   BOOLEAN       NOT NULL DEFAULT TRUE,
+    creation_date           TIMESTAMP     NOT NULL,
+    last_modified_date      TIMESTAMP     NOT NULL,
+    is_active               BOOLEAN       NOT NULL DEFAULT TRUE,
+    FOREIGN KEY (user_id) REFERENCES users (id)
+);
+
+DROP TABLE IF EXISTS fundraisings_reports;
+CREATE TABLE fundraisings_reports (
+                                      id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                                      text_content TEXT NOT NULL,
+                                      transaction_report BLOB NOT NULL,
+                                      creation_date TIMESTAMP,
+                                      last_modified_date TIMESTAMP,
+                                      is_active BOOLEAN NOT NULL DEFAULT TRUE
+);
+
+DROP TABLE IF EXISTS fundraisings;
+CREATE TABLE fundraisings (
+                              id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                              name VARCHAR(255) NOT NULL,
+                              is_closed BOOLEAN NOT NULL DEFAULT FALSE,
+                              final_amount DECIMAL(19,2) NOT NULL ,
+                              actual_amount DECIMAL(19,2) NOT NULL DEFAULT 0,
+                              text_content TEXT NOT NULL,
+                              volunteer_id BIGINT NOT NULL,
+                              report_id BIGINT,
+                              creation_date TIMESTAMP,
+                              last_modified_date TIMESTAMP,
+                              is_active BOOLEAN NOT NULL DEFAULT TRUE,
+                              FOREIGN KEY (volunteer_id) REFERENCES volunteers(id),
+                              FOREIGN KEY (report_id) REFERENCES fundraisings_reports(id)
+);

@@ -4,10 +4,10 @@ package com.coyjiv.isocial.resource.rest;
 import com.coyjiv.isocial.dto.respone.friend.CustomFriendResponse;
 import com.coyjiv.isocial.dto.respone.friend.FriendResponseDto;
 import com.coyjiv.isocial.dto.respone.page.PageWrapper;
-import com.coyjiv.isocial.exceptions.EntityNotFoundException;
 import com.coyjiv.isocial.service.friend.FriendService;
 
 import io.sentry.Sentry;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 
 @RestController
 @RequiredArgsConstructor
@@ -31,7 +29,7 @@ public class FriendController {
 
   @PostMapping()
   public ResponseEntity<String> sendFriendRequest(@RequestParam Long addresserId)
-    throws EntityNotFoundException, IllegalAccessException {
+    throws IllegalAccessException {
     boolean result = friendService.sendFriendRequest(addresserId);
     if (result) {
       return ResponseEntity.ok("Request sent successfully");
@@ -110,7 +108,7 @@ public class FriendController {
   @GetMapping("/availableFriendRequests")
   public ResponseEntity<?> availableFriendRequests(@RequestParam(defaultValue = "0") @Min(0) Integer page,
                                                    @RequestParam(defaultValue = "10") @Min(0) Integer size)
-    throws EntityNotFoundException {
+    {
     CustomFriendResponse friendRequests = friendService.availableFriendRequests(page, size);
     return ResponseEntity.ok(friendRequests);
   }

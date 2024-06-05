@@ -4,7 +4,7 @@ import ReactDOM from "react-dom/client";
 import { theme } from "./theme";
 //routes
 import { App } from "./views/routes/Routes";
-//styles
+//styles.module.scss
 import "react-toastify/dist/ReactToastify.css";
 import "./index.scss";
 //redux

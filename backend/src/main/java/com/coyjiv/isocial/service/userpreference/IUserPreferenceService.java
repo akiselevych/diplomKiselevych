@@ -2,7 +2,7 @@ package com.coyjiv.isocial.service.userpreference;
 
 import com.coyjiv.isocial.domain.User;
 import com.coyjiv.isocial.domain.UserPreference;
-import com.coyjiv.isocial.exceptions.EntityNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.util.Map;
 

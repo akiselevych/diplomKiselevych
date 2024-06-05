@@ -1,7 +1,8 @@
 import Posts from '../views/Profile/tabs/Posts'
 // import About from '../views/Profile/tabs/About'
 import Friends from '../views/Profile/tabs/Friends'
-import Photos from '../views/Profile/tabs/Photos'
+import Fundraisings from "../views/Profile/tabs/Fundraisings/Fundraisings.jsx";
+// import Photos from '../views/Profile/tabs/Photos'
 // import Videos from "../views/Profile/tabs/Videos";
 
 export const profileTabs = [
@@ -25,10 +26,16 @@ export const profileTabs = [
   },
   {
     id: 3,
-    label: 'Photos',
-    path: '/profile/photos',
-    component: Photos,
+    label: 'Fundraisings',
+    path: '/profile/fundraisings',
+    component: Fundraisings,
   },
+  // {
+  //   id: 3,
+  //   label: 'Photos',
+  //   path: '/profile/photos',
+  //   component: Photos,
+  // },
   // {
   //     id: 5,
   //     label: 'Videos',

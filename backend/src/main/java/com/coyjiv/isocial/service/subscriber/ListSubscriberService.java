@@ -7,7 +7,6 @@ import com.coyjiv.isocial.domain.Subscriber;
 import com.coyjiv.isocial.domain.User;
 import com.coyjiv.isocial.dto.respone.page.PageWrapper;
 import com.coyjiv.isocial.dto.respone.user.UserProfileResponseDto;
-import com.coyjiv.isocial.exceptions.EntityNotFoundException;
 import com.coyjiv.isocial.transfer.user.UserProfileResponseDtoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

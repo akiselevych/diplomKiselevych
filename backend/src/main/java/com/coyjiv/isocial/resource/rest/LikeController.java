@@ -1,12 +1,10 @@
 package com.coyjiv.isocial.resource.rest;
 
 import com.coyjiv.isocial.domain.LikeableEntity;
-import com.coyjiv.isocial.exceptions.EntityNotFoundException;
 import com.coyjiv.isocial.service.like.ILikeService;
 import io.sentry.Sentry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

@@ -1,8 +1,8 @@
 package com.coyjiv.isocial.exceptions.handlers;
 
 
-import com.coyjiv.isocial.exceptions.EntityNotFoundException;
 import com.coyjiv.isocial.exceptions.RequestValidationException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import javax.naming.ServiceUnavailableException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -51,9 +52,14 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(400).body(ex.getMessage());
   }
 
+  @ExceptionHandler(ServiceUnavailableException.class)
+  public ResponseEntity<String> handleNumberFormatException(ServiceUnavailableException ex) {
+    return ResponseEntity.status(503).body(ex.getMessage());
+  }
+
   @ExceptionHandler(Exception.class)
   public ResponseEntity<?> handleUncheckedExceptions(Exception exception) {
-    return ResponseEntity.status(500).build();
+    return ResponseEntity.status(500).body(exception.getMessage());
   }
 
 

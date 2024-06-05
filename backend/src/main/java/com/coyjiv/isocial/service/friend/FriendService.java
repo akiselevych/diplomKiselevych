@@ -11,7 +11,6 @@ import com.coyjiv.isocial.domain.UserPreference;
 import com.coyjiv.isocial.dto.respone.friend.CustomFriendResponse;
 import com.coyjiv.isocial.dto.respone.friend.FriendResponseDto;
 import com.coyjiv.isocial.dto.respone.page.PageWrapper;
-import com.coyjiv.isocial.exceptions.EntityNotFoundException;
 import com.coyjiv.isocial.service.chat.IChatService;
 import com.coyjiv.isocial.service.subscriber.ISubscriberService;
 import com.coyjiv.isocial.service.userpreference.IUserPreferenceService;
@@ -26,6 +25,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -54,7 +54,7 @@ public class FriendService implements IFriendService {
 
   @Transactional
   @Override
-  public boolean sendFriendRequest(Long addresserId) throws EntityNotFoundException, IllegalAccessException {
+  public boolean sendFriendRequest(Long addresserId) throws IllegalAccessException {
     Long requesterId = emailPasswordAuthProvider.getAuthenticationPrincipal();
     if (requesterId.equals(addresserId)) {
       throw new IllegalAccessException("You cannot sent request yourself");
@@ -236,7 +236,7 @@ public class FriendService implements IFriendService {
   }
 
   @Transactional(readOnly = true)
-  public CustomFriendResponse availableFriendRequests(Integer page, Integer size) throws EntityNotFoundException {
+  public CustomFriendResponse availableFriendRequests(Integer page, Integer size) {
     long userId = emailPasswordAuthProvider.getAuthenticationPrincipal();
     Optional<User> user = userRepository.findById(userId);
 

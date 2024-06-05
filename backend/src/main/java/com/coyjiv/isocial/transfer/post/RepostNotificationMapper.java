@@ -5,9 +5,6 @@ import com.coyjiv.isocial.dao.UserRepository;
 import com.coyjiv.isocial.domain.Post;
 import com.coyjiv.isocial.domain.User;
 import com.coyjiv.isocial.dto.respone.post.RepostNotificationDto;
-import com.coyjiv.isocial.dto.respone.user.UserDefaultResponseDto;
-import com.coyjiv.isocial.exceptions.EntityNotFoundException;
-import com.coyjiv.isocial.service.user.IUserService;
 import com.coyjiv.isocial.transfer.DtoMapperFacade;
 import org.springframework.stereotype.Service;
 

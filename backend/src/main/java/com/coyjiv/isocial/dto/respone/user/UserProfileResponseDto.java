@@ -29,6 +29,7 @@ public class UserProfileResponseDto {
   private String bannerUrl;
   @JsonProperty("is_volunteer")
   private boolean isVolunteer;
+  private boolean isVerified;
   private Long friendsCount;
   private Long subscribersCount;
   private Long subscriptionsCount;

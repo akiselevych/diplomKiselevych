@@ -9,7 +9,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import "./Chat.scss";
 import ChatView from "./ChatView/index.jsx";
 import { useDispatch, useSelector } from "react-redux";
-import { clearSelectedChat } from "../../store/chatSlice.js";
+import { clearSelectedChat } from "../../store/slices/Chat.slice.jsx";
 
 const ChatContainer = () => {
   const [isOpen, setIsOpen] = useState(false);

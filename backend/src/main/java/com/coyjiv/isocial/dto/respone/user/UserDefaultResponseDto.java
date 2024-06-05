@@ -27,6 +27,7 @@ public class UserDefaultResponseDto {
   private String bannerUrl;
   @JsonProperty("is_volunteer")
   private boolean isVolunteer;
+  private boolean isVerified;
   private UserGender gender;
   private boolean isPremium;
   private String premiumNickname;

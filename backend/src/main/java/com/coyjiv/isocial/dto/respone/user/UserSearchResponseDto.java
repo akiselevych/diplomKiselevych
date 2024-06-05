@@ -19,6 +19,7 @@ public class UserSearchResponseDto {
   private String lastName;
   @JsonProperty("is_volunteer")
   private boolean isVolunteer;
+  private boolean isVerified;
   private List<String> avatarsUrl;
   private UserActivityStatus activityStatus;
 }

@@ -1,11 +1,10 @@
 package com.coyjiv.isocial.cache;
 
-import com.coyjiv.isocial.exceptions.EntityNotFoundException;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.util.Objects;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class OnlineUsersCache {
@@ -18,10 +17,10 @@ public class OnlineUsersCache {
     onlineUsersCache.put(sessionId, String.valueOf(userId));
   }
 
-  public static Long getUserId(String uuid) throws EntityNotFoundException {
+  public static Long getUserId(String uuid) {
     String userId = onlineUsersCache.getIfPresent(uuid);
     onlineUsersCache.invalidate(uuid);
-    if (Objects.equals(userId, "null")) {
+    if (Objects.equals(userId, "null") || userId == null) {
       throw new EntityNotFoundException("User not found");
     }
     return Long.valueOf(userId);

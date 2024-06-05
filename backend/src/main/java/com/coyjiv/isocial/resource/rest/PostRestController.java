@@ -5,10 +5,10 @@ import com.coyjiv.isocial.dto.request.post.PostRequestDto;
 import com.coyjiv.isocial.dto.request.post.RePostRequestDto;
 import com.coyjiv.isocial.dto.request.post.UpdatePostRequestDto;
 import com.coyjiv.isocial.dto.respone.post.PostResponseDto;
-import com.coyjiv.isocial.exceptions.EntityNotFoundException;
 import com.coyjiv.isocial.exceptions.RequestValidationException;
 import com.coyjiv.isocial.service.post.IPostService;
 import com.coyjiv.isocial.transfer.post.PostResponseMapper;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -94,7 +94,7 @@ public class PostRestController {
   @GetMapping("/recommendations")
   public ResponseEntity<?> getRecommendation(@RequestParam(defaultValue = "0") @Min(0) Integer page,
                                              @RequestParam(defaultValue = "10") @Min(0) Integer size)
-          throws EntityNotFoundException {
+          {
     return ResponseEntity.ok(postService.getRecommendation(page, size));
   }
 }

@@ -21,6 +21,7 @@ CREATE TABLE public.users
     creation_date      TIMESTAMP,
     last_modified_date TIMESTAMP,
     is_premium         BOOLEAN      NOT NULL DEFAULT FALSE,
+    is_verified         BOOLEAN      NOT NULL DEFAULT FALSE,
     premium_nickname   VARCHAR(250),
     premium_emoji      VARCHAR(250),
     is_active          BOOLEAN      NOT NULL DEFAULT FALSE
@@ -219,6 +220,8 @@ CREATE TABLE fundraisings_reports (
                                       id BIGINT AUTO_INCREMENT PRIMARY KEY,
                                       text_content TEXT NOT NULL,
                                       transaction_report BLOB NOT NULL,
+                                      file_name          VARCHAR(255)  NOT NULL,
+                                      file_type          VARCHAR(1000) NOT NULL,
                                       creation_date TIMESTAMP,
                                       last_modified_date TIMESTAMP,
                                       is_active BOOLEAN NOT NULL DEFAULT TRUE
@@ -229,8 +232,8 @@ CREATE TABLE fundraisings (
                               id BIGINT AUTO_INCREMENT PRIMARY KEY,
                               name VARCHAR(255) NOT NULL,
                               is_closed BOOLEAN NOT NULL DEFAULT FALSE,
-                              final_amount DECIMAL(19,2) NOT NULL ,
-                              actual_amount DECIMAL(19,2) NOT NULL DEFAULT 0,
+                              final_amount INT NOT NULL ,
+                              actual_amount INT NOT NULL DEFAULT 0,
                               text_content TEXT NOT NULL,
                               volunteer_id BIGINT NOT NULL,
                               report_id BIGINT,

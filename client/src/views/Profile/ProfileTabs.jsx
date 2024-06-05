@@ -10,7 +10,7 @@ import { a11yProps } from '../../helpers/a11y';
 import { idFromTabLabel } from '../../helpers/misc';
 import PropTypes from 'prop-types';
 
-const ProfileTabs = () => {
+const ProfileTabs = ({isVolunteer}) => {
   const [searchParams, setSearchParams] = useSearchParams({ tab: profileTabs[0].label });
 
   const handleChange = (event, newValue) => {
@@ -23,12 +23,18 @@ const ProfileTabs = () => {
   };
 
   const value = idFromTabLabel(searchParams.get('tab'), profileTabs)
-
   return (
     <Box sx={{ width: '100%' }}>
       <Container maxWidth={'lg'}>
         <Tabs sx={profileTabsStyles} value={value} onChange={handleChange} aria-label="profile tabs">
-          {profileTabs.map((tab, index) => <Tab sx={{ textTransform: 'capitalize' }} key={index} label={tab.label} {...a11yProps(index)} />)}
+          {profileTabs.map((tab, index) => {
+            if (tab.id === 3 && !isVolunteer){
+              return;
+            }
+            return (
+                <Tab sx={{textTransform: 'capitalize'}} key={index} label={tab.label} {...a11yProps(index)} />
+            )
+          })}
         </Tabs>
       </Container>
       {profileTabs.map((tab, index) => (
@@ -41,7 +47,8 @@ const ProfileTabs = () => {
 }
 
 ProfileTabs.propTypes = {
-  id: PropTypes.number
+  id: PropTypes.number,
+  isVolunteer: PropTypes.bool,
 }
 
 export default ProfileTabs

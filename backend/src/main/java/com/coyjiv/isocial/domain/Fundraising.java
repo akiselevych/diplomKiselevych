@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-@ToString
+@ToString(exclude = "volunteer")
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -22,19 +22,23 @@ public class Fundraising  extends AbstractEntity {
   private boolean isClosed;
 
   @Column(name = "final_amount")
-  private BigDecimal finalAmount;
+  private int finalAmount;
 
   @Column(name = "actual_amount")
-  private BigDecimal actualAmount;
+  private int actualAmount;
 
   @Column(name = "text_content")
   private String textContent;
 
-  @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "volunteer_id")
+  @ManyToOne
+  @JoinColumn(name = "volunteer_id",referencedColumnName = "id")
   private Volunteer volunteer;
 
-  @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+  @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "report_id", referencedColumnName = "id")
   private FundraisingReport fundraisingReport;
+
+  public void donate(int sum){
+    this.actualAmount += sum;
+  }
 }

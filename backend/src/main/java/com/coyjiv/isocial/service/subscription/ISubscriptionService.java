@@ -1,9 +1,8 @@
 package com.coyjiv.isocial.service.subscription;
 
 import com.coyjiv.isocial.domain.Subscription;
-import com.coyjiv.isocial.exceptions.EntityNotFoundException;
 import com.coyjiv.isocial.exceptions.RequestValidationException;
-import org.springframework.transaction.annotation.Transactional;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
 import java.util.Optional;

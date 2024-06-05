@@ -1,10 +1,9 @@
 package com.coyjiv.isocial.resource.rest;
 
-import com.coyjiv.isocial.domain.Volunteer;
-import com.coyjiv.isocial.dto.respone.VolunteerResponseDto;
+import com.coyjiv.isocial.dto.respone.volunteer.VolunteerResponseDto;
 import com.coyjiv.isocial.dto.respone.page.PageWrapper;
-import com.coyjiv.isocial.exceptions.EntityNotFoundException;
 import com.coyjiv.isocial.service.volunteer.IVolunteerService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,24 +23,24 @@ public class VolunteerController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<VolunteerResponseDto> findById(@PathVariable("id") Long id) throws EntityNotFoundException {
+  public ResponseEntity<VolunteerResponseDto> findById(@PathVariable("id") Long id) {
     return ResponseEntity.ok(volunteerService.findById(id));
   }
 
   @GetMapping("/user/{user_id}")
   public ResponseEntity<VolunteerResponseDto> findByUserId(@PathVariable("user_id") Long id)
-          throws EntityNotFoundException {
+          {
     return ResponseEntity.ok(volunteerService.findByUserId(id));
   }
 
   @PostMapping
-  public ResponseEntity<?> create(@RequestParam("user_id") Long userId) throws EntityNotFoundException {
-    volunteerService.create(userId);
+  public ResponseEntity<?> create() throws IllegalAccessException {
+    volunteerService.create();
     return ResponseEntity.ok().build();
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<?> delete(@PathVariable("id") Long id) throws EntityNotFoundException {
+  public ResponseEntity<?> delete(@PathVariable("id") Long id) {
     volunteerService.delete(id);
     return ResponseEntity.ok().build();
   }

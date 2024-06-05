@@ -5,9 +5,7 @@ import com.coyjiv.isocial.domain.UserFriendStatus;
 import com.coyjiv.isocial.dto.respone.friend.CustomFriendResponse;
 import com.coyjiv.isocial.dto.respone.friend.FriendResponseDto;
 import com.coyjiv.isocial.dto.respone.page.PageWrapper;
-import com.coyjiv.isocial.dto.respone.user.UserSearchResponseDto;
-import com.coyjiv.isocial.exceptions.EntityNotFoundException;
-import org.springframework.data.repository.query.Param;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.io.IOException;
 import java.util.List;

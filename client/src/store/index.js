@@ -3,15 +3,17 @@ import { friendsApi } from './services/friendService'
 import { searchApi } from './services/searchService'
 import { postsApi } from './services/postService'
 import { commentApi } from './services/commentService'
-import chatSlice from './chatSlice'
+import chatSlice from './slices/Chat.slice.jsx'
 
 import { configureStore } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/query'
 import {notificationApi} from "./services/notification.js";
+import VolunteerSlice from "./slices/Volunteer.slice.jsx";
 
 export const store = configureStore({
   reducer: {
     chat: chatSlice,
+    volunteers: VolunteerSlice,
     [profileApi.reducerPath]: profileApi.reducer,
     [friendsApi.reducerPath]: friendsApi.reducer,
     [postsApi.reducerPath]: postsApi.reducer,

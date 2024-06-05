@@ -4,17 +4,13 @@ import com.coyjiv.isocial.auth.EmailPasswordAuthProvider;
 import com.coyjiv.isocial.dao.LikeRepository;
 import com.coyjiv.isocial.domain.Like;
 import com.coyjiv.isocial.domain.LikeableEntity;
-import com.coyjiv.isocial.domain.NotificationEvent;
-import com.coyjiv.isocial.dto.respone.like.LikeInfoResponseDto;
 import com.coyjiv.isocial.dto.respone.page.PageWrapper;
 import com.coyjiv.isocial.dto.respone.user.UserProfileResponseDto;
-import com.coyjiv.isocial.dto.respone.user.UserSearchResponseDto;
-import com.coyjiv.isocial.exceptions.EntityNotFoundException;
 import com.coyjiv.isocial.service.notifications.INotificationService;
 import com.coyjiv.isocial.service.user.IUserService;
 import com.coyjiv.isocial.service.websocket.IWebsocketService;
-import com.coyjiv.isocial.transfer.like.LikeDtoResponseMapper;
 import io.sentry.Sentry;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,7 +21,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +33,7 @@ public class LikeService implements ILikeService {
 
   @Transactional
   @Override
-  public long countLikesByEntity(Long entityId, LikeableEntity entityType) throws EntityNotFoundException {
+  public long countLikesByEntity(Long entityId, LikeableEntity entityType) {
     if (entityType == null) {
       throw new EntityNotFoundException("Entity type is required");
     }
@@ -50,7 +45,7 @@ public class LikeService implements ILikeService {
 
   @Transactional
   @Override
-  public boolean isLikedByUser(Long userId, Long entityId, LikeableEntity entityType) throws EntityNotFoundException {
+  public boolean isLikedByUser(Long userId, Long entityId, LikeableEntity entityType) {
     if (userId == null) {
       throw new EntityNotFoundException("User id is required");
     }
@@ -65,7 +60,7 @@ public class LikeService implements ILikeService {
 
   @Transactional
   @Override
-  public List<Like> getRecentLikes(Long entityId, LikeableEntity entityType) throws EntityNotFoundException {
+  public List<Like> getRecentLikes(Long entityId, LikeableEntity entityType) {
     if (entityType == null) {
       throw new EntityNotFoundException("Entity type is required");
     }
@@ -81,7 +76,7 @@ public class LikeService implements ILikeService {
   @Transactional
   @Override
   public PageWrapper<UserProfileResponseDto> getUsersWhoLikedEntity(Long entityId, LikeableEntity entityType)
-          throws EntityNotFoundException {
+          {
     if (entityType == null) {
       throw new EntityNotFoundException("Entity type is required");
     }
@@ -135,7 +130,7 @@ public class LikeService implements ILikeService {
 
   @Transactional
   @Override
-  public void toggleLike(Long userId, Long entityId, LikeableEntity entityType) throws EntityNotFoundException {
+  public void toggleLike(Long userId, Long entityId, LikeableEntity entityType) {
     if (entityType == null) {
       throw new EntityNotFoundException("Entity type is required");
     }

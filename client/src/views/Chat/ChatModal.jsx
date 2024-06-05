@@ -17,7 +17,7 @@ import { useTheme } from "@mui/material/styles";
 import { FaArrowLeft, FaXmark } from "react-icons/fa6";
 import { FaSearch } from "react-icons/fa";
 import { useDispatch } from "react-redux";
-import { setPendingChat } from "../../store/chatSlice.js";
+import { setPendingChat } from "../../store/slices/Chat.slice.jsx";
 import { useNavigate } from "react-router-dom";
 import { Emoji } from "emoji-picker-react";
 import { useGetUserByNameQuery } from "../../store/services/searchService.js";
@@ -31,7 +31,7 @@ const ChatModal = ({ modalText, open = false, handleClose }) => {
   const { data: friends } = useGetFriendsListQuery({
     id: localStorage.getItem("userId"),
     page: friendsPage,
-  }, { pollingInterval: 1000 });
+  });
 
   const navigate = useNavigate();
 

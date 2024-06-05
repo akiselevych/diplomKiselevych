@@ -2,12 +2,11 @@ package com.coyjiv.isocial.resource.rest;
 
 import com.coyjiv.isocial.dto.request.message.CreateMessageRequestDto;
 import com.coyjiv.isocial.exceptions.ChatAlreadyExistException;
-import com.coyjiv.isocial.exceptions.EntityNotFoundException;
 import com.coyjiv.isocial.exceptions.RequestValidationException;
 import com.coyjiv.isocial.service.chat.ChatService;
-import com.coyjiv.isocial.service.chat.IChatService;
 import com.coyjiv.isocial.service.message.IMessageService;
 import io.sentry.Sentry;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -35,14 +34,14 @@ public class ChatController {
 
   @GetMapping("/{id}")
   public ResponseEntity<?> findActiveById(@PathVariable(name = "id") Long id)
-          throws EntityNotFoundException, IllegalAccessException {
+          throws IllegalAccessException {
     return ResponseEntity.ok(chatService.findActiveDtoById(id));
   }
 
   @PostMapping
   public ResponseEntity<?> create(@RequestParam(name = "receiverId") Long receiverId,
                                   @RequestBody @Valid CreateMessageRequestDto firstMessage)
-          throws EntityNotFoundException, RequestValidationException, IllegalAccessException {
+          throws RequestValidationException, IllegalAccessException {
     try {
       return ResponseEntity.status(201).body(chatService.create(firstMessage, receiverId));
     } catch (ChatAlreadyExistException exception) {
@@ -59,14 +58,14 @@ public class ChatController {
 
   @DeleteMapping("/{id}")
   public ResponseEntity<?> delete(@PathVariable(name = "id") Long id)
-          throws EntityNotFoundException, IllegalAccessException {
+          throws IllegalAccessException {
     chatService.delete(id);
     return ResponseEntity.status(204).build();
   }
 
   @GetMapping("/getChatId/{userId}")
   public ResponseEntity<?> getChatId(@PathVariable(name = "userId") Long userId)
-          throws EntityNotFoundException {
+          {
     return ResponseEntity.ok(chatService.isUserInvolvedInChat(userId));
   }
 }

@@ -11,7 +11,7 @@ import {
 import { useState } from "react";
 import { userAvatar } from "../../../data/placeholders.js";
 import CardActionsPopover from "../FriendsSidebarUserCard/CardActionsPopover/CardActionsPopover.jsx";
-import { setPendingChat } from "../../../store/chatSlice.js";
+import { setPendingChat } from "../../../store/slices/Chat.slice.jsx";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
@@ -93,6 +93,7 @@ const FriendCard = ({
         direction="row"
         spacing={2}
         alignItems="center"
+        onClick={onClick}
       >
         <Avatar
           src={userAvatar(
@@ -123,7 +124,7 @@ const FriendCard = ({
         <CardActionsPopover
           name={fullName}
           onRemove={onDelete}
-          onMessage={() => goToMessageStep(friend)}
+          onMessage={(e) => { e.stopPropagation(); goToMessageStep(friend) }}
           boxProps={{ style: { marginLeft: "auto" } }}
         />
       </Stack>

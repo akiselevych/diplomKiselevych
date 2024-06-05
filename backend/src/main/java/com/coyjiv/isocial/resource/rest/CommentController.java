@@ -1,8 +1,8 @@
 package com.coyjiv.isocial.resource.rest;
 
 import com.coyjiv.isocial.dto.request.comment.DefaultCommentRequestDto;
-import com.coyjiv.isocial.exceptions.EntityNotFoundException;
 import com.coyjiv.isocial.service.comment.ICommentService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ public class CommentController {
   @PostMapping("")
   public ResponseEntity<?> create(@RequestParam(name = "postId") Long postId,
                                   @RequestBody @Valid DefaultCommentRequestDto defaultCommentRequestDto)
-          throws EntityNotFoundException {
+          {
     return ResponseEntity.ok(commentService.create(postId, defaultCommentRequestDto));
   }
 
@@ -34,7 +34,7 @@ public class CommentController {
   public ResponseEntity<?> findByPostId(@PathVariable("postId") Long postId,
                                         @RequestParam(defaultValue = "0") @Min(0) Integer page,
                                         @RequestParam(defaultValue = "10") @Min(0) Integer size)
-          throws EntityNotFoundException {
+          {
     return ResponseEntity.ok(commentService.findByPostId(postId, page, size));
   }
 
@@ -48,7 +48,7 @@ public class CommentController {
   @PatchMapping("/{id}")
   public ResponseEntity<?> update(@PathVariable(name = "id") Long id,
                                   @RequestBody @Valid DefaultCommentRequestDto defaultCommentRequestDto)
-          throws EntityNotFoundException, IllegalAccessException {
+          throws IllegalAccessException {
     return ResponseEntity.ok(commentService.update(id, defaultCommentRequestDto));
   }
 }

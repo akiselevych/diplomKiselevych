@@ -9,13 +9,13 @@ import com.coyjiv.isocial.dto.request.message.CreateMessageRequestDto;
 import com.coyjiv.isocial.dto.request.message.UpdateMessageRequestDto;
 import com.coyjiv.isocial.dto.respone.message.MessageNotificationDto;
 import com.coyjiv.isocial.dto.respone.page.PageWrapper;
-import com.coyjiv.isocial.exceptions.EntityNotFoundException;
 import com.coyjiv.isocial.exceptions.RequestValidationException;
 import com.coyjiv.isocial.service.chat.IChatService;
 import com.coyjiv.isocial.service.websocket.IWebsocketService;
 import com.coyjiv.isocial.transfer.message.CreateMessageRequestMapper;
 import com.coyjiv.isocial.transfer.message.MessageNotificationDtoMapper;
 import com.coyjiv.isocial.utils.MessagesUtils;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -43,7 +43,7 @@ public class MessageService implements IMessageService {
   @Transactional
   @Override
   public PageWrapper<MessageNotificationDto> findAllActiveByChatId(int page, int quantity, Long chatId)
-          throws EntityNotFoundException, IllegalAccessException {
+          throws IllegalAccessException {
     Long requestOwnerId = provider.getAuthenticationPrincipal();
     Sort sort = Sort.by(Sort.Direction.DESC, "creationDate");
     Pageable pageable = PageRequest.of(page, quantity, sort);
@@ -82,7 +82,7 @@ public class MessageService implements IMessageService {
   @Transactional
   @Override
   public MessageNotificationDto create(Long chatId, CreateMessageRequestDto createMessageRequestDto)
-          throws EntityNotFoundException, IllegalAccessException, RequestValidationException {
+          throws IllegalAccessException, RequestValidationException {
 
     MessagesUtils.validateFirstMessage(createMessageRequestDto);
 
@@ -145,6 +145,12 @@ public class MessageService implements IMessageService {
   @Transactional
   public void readMessages(Long chatId) {
     messageRepository.readAllMessages(chatId, authProvider.getAuthenticationPrincipal());
+  }
+
+  @Override
+  @Transactional
+  public void readOneMessage(Long messageId) {
+    messageRepository.readOneMessage(messageId, authProvider.getAuthenticationPrincipal());
   }
 
 

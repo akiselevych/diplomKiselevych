@@ -4,9 +4,13 @@ import com.coyjiv.isocial.cache.EmailRegistrationCache;
 import com.coyjiv.isocial.dto.request.auth.LoginRequestDto;
 import com.coyjiv.isocial.dto.request.auth.PasswordResetRequestDto;
 import com.coyjiv.isocial.dto.request.auth.RefreshRequestDto;
+import com.coyjiv.isocial.dto.request.dia.ValidatePassportRequestDto;
 import com.coyjiv.isocial.dto.request.user.UserRegistrationRequestDto;
+import com.coyjiv.isocial.dto.respone.dia.DiaPasspValidResponseDto;
 import com.coyjiv.isocial.service.auth.IAuthService;
+import com.coyjiv.isocial.service.dia.IDiaService;
 import com.coyjiv.isocial.service.user.IUserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.sentry.Sentry;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
 import com.coyjiv.isocial.domain.User;
 
+import javax.naming.ServiceUnavailableException;
 import javax.security.auth.login.AccountNotFoundException;
 import java.util.Optional;
 
@@ -119,4 +124,5 @@ public class AuthenticationController {
       return ResponseEntity.status(404).body("Email not found.");
     }
   }
+
 }

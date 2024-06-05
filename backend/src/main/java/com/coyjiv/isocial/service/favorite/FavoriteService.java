@@ -8,10 +8,9 @@ import com.coyjiv.isocial.domain.Post;
 import com.coyjiv.isocial.dto.request.favorite.FavoriteRequestDto;
 import com.coyjiv.isocial.dto.respone.favorite.FavoriteResponseDto;
 import com.coyjiv.isocial.dto.respone.page.PageWrapper;
-import com.coyjiv.isocial.dto.respone.post.PostResponseDto;
-import com.coyjiv.isocial.exceptions.EntityNotFoundException;
 import com.coyjiv.isocial.transfer.favorite.FavoriteRequestMapper;
 import com.coyjiv.isocial.transfer.favorite.FavoriteResponseMapper;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -89,7 +88,7 @@ public class FavoriteService implements IFavoriteService {
 
   @Override
   @Transactional
-  public Favorite create(FavoriteRequestDto favoriteRequestDto) throws EntityNotFoundException, IllegalAccessException {
+  public Favorite create(FavoriteRequestDto favoriteRequestDto) throws IllegalAccessException {
     if (findActiveBySelectorIdPostId(favoriteRequestDto.getSelectedPostId()).isPresent()
             && findActiveBySelectorIdPostId(favoriteRequestDto.getSelectedPostId()).get().isActive()) {
       throw new IllegalAccessException("User have no authorities to do this request.");
@@ -109,11 +108,11 @@ public class FavoriteService implements IFavoriteService {
 
   @Override
   @Transactional
-  public void delete(Long postId, boolean noPermission) throws IllegalAccessException {
+  public void delete(Long postId) {
     Optional<Favorite> favoriteToDeactivate = findActiveBySelectorIdPostId(postId);
     if (favoriteToDeactivate.isPresent()) {
       Favorite favorite = favoriteToDeactivate.get();
-      validateFavoriteOwner(favorite.getSelectorId(), noPermission);
+
       favorite.setActive(false);
       favoriteRepository.save(favorite);
     }
@@ -126,7 +125,7 @@ public class FavoriteService implements IFavoriteService {
 
   @Override
   @Transactional
-  public boolean toggle(Long postId) throws EntityNotFoundException, IllegalAccessException {
+  public boolean toggle(Long postId) throws IllegalAccessException {
     validatePost(postId);
     Long requestOwner = emailPasswordAuthProvider.getAuthenticationPrincipal();
     Optional<Favorite> activeFavorite = favoriteRepository.findActiveBySelectorIdPostId(requestOwner, postId);
@@ -149,14 +148,14 @@ public class FavoriteService implements IFavoriteService {
   }
 
 
-  private void validateFavoriteOwner(Long selectorId, boolean noPermission) throws IllegalAccessException {
+  private void validateFavoriteOwner(Long selectorId) throws IllegalAccessException {
     Long requestOwner = emailPasswordAuthProvider.getAuthenticationPrincipal();
-    if (!Objects.equals(selectorId, requestOwner) && noPermission) {
+    if (!Objects.equals(selectorId, requestOwner) ) {
       throw new IllegalAccessException("User have no authorities to do this request.");
     }
   }
 
-  private void validatePost(Long id) throws EntityNotFoundException {
+  private void validatePost(Long id) {
     Optional<Post> selectedPost = postRepository.findActiveById(id);
     if (selectedPost.isEmpty()) {
       throw new EntityNotFoundException(

@@ -2,9 +2,9 @@ package com.coyjiv.isocial.resource.rest;
 
 import com.coyjiv.isocial.dto.request.message.CreateMessageRequestDto;
 import com.coyjiv.isocial.dto.request.message.UpdateMessageRequestDto;
-import com.coyjiv.isocial.exceptions.EntityNotFoundException;
 import com.coyjiv.isocial.exceptions.RequestValidationException;
 import com.coyjiv.isocial.service.message.IMessageService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,13 +28,13 @@ public class MessageController {
   public ResponseEntity<?> findAllActiveByChatId(@RequestParam(name = "page") Integer page,
                                                  @RequestParam(name = "quantity") Integer quantity,
                                                  @RequestParam(name = "chatId") Long chatId)
-          throws EntityNotFoundException, IllegalAccessException {
+    throws IllegalAccessException {
     return ResponseEntity.ok(messageService.findAllActiveByChatId(page, quantity, chatId));
   }
 
   @GetMapping("/{id}")
   public ResponseEntity<?> findActiveById(@PathVariable(name = "id") Long id)
-          throws EntityNotFoundException, IllegalAccessException {
+    throws IllegalAccessException {
     return ResponseEntity.ok(messageService.findActiveById(id));
   }
 
@@ -50,23 +50,29 @@ public class MessageController {
     return ResponseEntity.ok(messageService.countUnreadMessages());
   }
 
+  @PostMapping("/read")
+  public ResponseEntity<?> seen(@RequestParam(name = "messageId") Long messageId) {
+    messageService.readOneMessage(messageId);
+    return ResponseEntity.ok().build();
+  }
+
   @PostMapping
   public ResponseEntity<?> create(@RequestParam(name = "chatId") Long chatId,
                                   @RequestBody @Valid CreateMessageRequestDto createMessageRequestDto)
-          throws EntityNotFoundException, RequestValidationException, IllegalAccessException {
+    throws RequestValidationException, IllegalAccessException {
     return ResponseEntity.status(201).body(messageService.create(chatId, createMessageRequestDto));
   }
 
   @PatchMapping("/{id}")
   public ResponseEntity<?> update(@PathVariable(name = "id") Long id,
                                   @RequestBody @Valid UpdateMessageRequestDto updateMessageRequestDto)
-          throws EntityNotFoundException, IllegalAccessException {
+    throws IllegalAccessException {
     return ResponseEntity.ok(messageService.update(id, updateMessageRequestDto));
   }
 
   @DeleteMapping("/{id}")
   public ResponseEntity<?> delete(@PathVariable(name = "id") Long id)
-          throws EntityNotFoundException, IllegalAccessException {
+    throws IllegalAccessException {
     messageService.delete(id);
     return ResponseEntity.status(204).build();
   }

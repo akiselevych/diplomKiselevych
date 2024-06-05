@@ -12,7 +12,7 @@ import ChatHeader from "../ChatHeader";
 import ChatMessages from "../ChatMessages";
 import { useNavigate } from "react-router-dom";
 
-import { clearPendingChat, setSelectedChat } from "../../../store/chatSlice";
+import { clearPendingChat, setSelectedChat } from "../../../store/slices/Chat.slice.jsx";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import ChatItem from "../ChatItem";
@@ -22,6 +22,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { SearchBase, SearchContainer } from "../../../components/SidebarSearch/SidebarSearch.styled";
 import { SearchIcon } from "../../../components/MainSearch/MainSearch.styled";
 import { userAvatar } from "../../../data/placeholders";
+import { updateChats } from "../../../store/actions/chat";
 
 const validationScheme = Yup.object().shape({
     text: Yup.string()
@@ -104,6 +105,14 @@ const PendingChatView = () => {
     const fetchMoreData = () => {
         setPage((prevPage) => prevPage + 1);
     };
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            dispatch(updateChats(chats.data.map(chat => chat.id)));
+        }, 5000);
+
+        return () => clearInterval(interval);
+    }, [])
 
     return (
         <div className={styles.chatAsideMainWrapper}>

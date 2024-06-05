@@ -7,7 +7,7 @@ import { jwtDecode } from "jwt-decode";
 import { useLocalStorage } from 'usehooks-ts';
 //validation
 import { validationSchema } from "./validation.js"
-//styles
+//styles.module.scss
 import styles from './styles.module.scss'
 //icon
 import spinner from '../../assets/icons/spinner.svg'

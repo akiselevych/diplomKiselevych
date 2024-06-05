@@ -2,10 +2,9 @@ package com.coyjiv.isocial.service.like;
 
 import com.coyjiv.isocial.domain.Like;
 import com.coyjiv.isocial.domain.LikeableEntity;
-import com.coyjiv.isocial.dto.respone.like.LikeInfoResponseDto;
 import com.coyjiv.isocial.dto.respone.page.PageWrapper;
 import com.coyjiv.isocial.dto.respone.user.UserProfileResponseDto;
-import com.coyjiv.isocial.exceptions.EntityNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
 

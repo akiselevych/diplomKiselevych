@@ -2,14 +2,17 @@ package com.coyjiv.isocial.service.user;
 
 import com.coyjiv.isocial.domain.User;
 import com.coyjiv.isocial.dto.request.auth.PasswordResetRequestDto;
+import com.coyjiv.isocial.dto.request.dia.ValidatePassportRequestDto;
 import com.coyjiv.isocial.dto.request.user.UserRegistrationRequestDto;
 import com.coyjiv.isocial.dto.respone.page.PageWrapper;
 import com.coyjiv.isocial.dto.respone.user.UserDefaultResponseDto;
 import com.coyjiv.isocial.dto.respone.user.UserProfileResponseDto;
 import com.coyjiv.isocial.dto.respone.user.UserSearchResponseDto;
-import com.coyjiv.isocial.exceptions.EntityNotFoundException;
 import com.coyjiv.isocial.exceptions.PasswordMatchException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import jakarta.persistence.EntityNotFoundException;
 
+import javax.naming.ServiceUnavailableException;
 import javax.security.auth.login.AccountNotFoundException;
 import java.util.List;
 import java.util.Map;
@@ -61,4 +64,6 @@ public interface IUserService {
   String getPremiumNickname(Long commenterId);
 
   String getPremiumEmoji(Long commenterId);
+
+  boolean verify(ValidatePassportRequestDto dto) throws ServiceUnavailableException, JsonProcessingException;
 }

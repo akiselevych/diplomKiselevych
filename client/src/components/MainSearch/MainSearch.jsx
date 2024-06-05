@@ -83,13 +83,15 @@ const MainSearch = ({ noLogo }) => {
   const renderExpression = isLoading
     ? <MainSearchEmptySection isLoading={isLoading} />
     : options.length > 0
-      ? options?.map(({ id, firstName, lastName, avatarsUrl }) => (
+      ? options?.map(({ id, firstName, lastName, avatarsUrl, is_volunteer, verified }) => (
         <MainSearchItem
           key={id}
           avatars={avatarsUrl}
           variant="search"
           fullName={`${firstName} ${lastName}`}
           onClick={() => handleGoToUser(id)}
+          isVerified={verified}
+          isVolunteer={is_volunteer}
         />
       ))
       : <MainSearchEmptySection />;

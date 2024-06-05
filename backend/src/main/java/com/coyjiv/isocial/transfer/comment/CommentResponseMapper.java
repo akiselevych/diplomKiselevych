@@ -5,15 +5,13 @@ import com.coyjiv.isocial.dao.UserRepository;
 import com.coyjiv.isocial.domain.Comment;
 import com.coyjiv.isocial.domain.User;
 import com.coyjiv.isocial.dto.respone.comment.CommentResponseDto;
-import com.coyjiv.isocial.exceptions.EntityNotFoundException;
 import com.coyjiv.isocial.service.like.ILikeService;
 import com.coyjiv.isocial.service.user.IUserService;
 import com.coyjiv.isocial.transfer.DtoMapperFacade;
 import com.coyjiv.isocial.transfer.user.UserSearchResponseMapper;
 import io.sentry.Sentry;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 
 @Service
 public class CommentResponseMapper extends DtoMapperFacade<Comment, CommentResponseDto> {

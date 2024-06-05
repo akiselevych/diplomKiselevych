@@ -81,6 +81,9 @@ public class User extends AbstractEntity {
   @Column(name = "premium_emoji")
   private String premiumEmoji;
 
+  @Column(name = "is_verified")
+  private boolean isVerified;
+
   @Column(name = "is_volunteer")
   private boolean isVolunteer;
 

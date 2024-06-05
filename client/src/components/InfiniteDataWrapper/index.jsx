@@ -1,7 +1,7 @@
 // import { useEffect, useCallback, useState, useMemo } from "react"
 // import InfiniteScroll from "react-infinite-scroll-component"
 // import PropTypes from 'prop-types'
-// import styles from '../PostsWrapper/postsWrapper.module.scss'
+// import styles.module.scss from '../PostsWrapper/postsWrapper.module.scss'
 
 // const InfiniteDataWrapper = ({ queryFn, skeleton, mapperFnc, mapperQueryArgsFnc, infiniteWrapperProps = {} }) => {
 //     const [page, setPage] = useState(0)
@@ -35,7 +35,7 @@
 //             next={fetchMoreData}
 //             hasMore={data?.hasNext}
 //             loader={<div style={{ display: 'flex', width: '100%' }}>{skeleton}</div>}
-//             className={styles.infiniteWrapper}
+//             className={styles.module.scss.infiniteWrapper}
 //             {...infiniteWrapperProps}
 //         >
 //             {

@@ -62,7 +62,7 @@ const NotificationItem = (props) => {
     return (
         <Link to={link}>
             <li className={styles.notificationItem}>
-                {/* <div className={styles.avatarImgContainer}> */}
+                {/* <div className={styles.module.scss.avatarImgContainer}> */}
                 <Avatar className={styles.avatarImg} src={userAvatar(senderAvatar)} alt="avatar" />
                 {/* </div> */}
                 <div className={`${page ? styles.notificationText : styles.notificationContent}`}>

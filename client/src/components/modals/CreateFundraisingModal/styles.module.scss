@@ -1,0 +1,40 @@
+@import "../../../styles/variables/colors";
+
+.form {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.inputField {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  input,textarea {
+    padding: 4px;
+    border-radius: 8px;
+    outline: none;
+    border: 1px solid gray;
+    resize: none;
+  }
+}
+
+.submitBtn {
+  padding: 10px 12px;
+  border-radius: 8px;
+  background-color: $primaryButtonBackground;
+  color: whitesmoke;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+
+  &:disabled{
+    background-color: gray;
+    cursor: not-allowed;
+  }
+}

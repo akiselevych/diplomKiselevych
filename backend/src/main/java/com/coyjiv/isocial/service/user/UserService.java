@@ -10,20 +10,23 @@ import com.coyjiv.isocial.domain.User;
 import com.coyjiv.isocial.domain.UserActivityStatus;
 import com.coyjiv.isocial.dto.request.auth.PasswordResetRequestDto;
 import com.coyjiv.isocial.domain.UserGender;
+import com.coyjiv.isocial.dto.request.dia.ValidatePassportRequestDto;
 import com.coyjiv.isocial.dto.request.user.UserRegistrationRequestDto;
 import com.coyjiv.isocial.dto.respone.page.PageWrapper;
 import com.coyjiv.isocial.dto.respone.user.UserDefaultResponseDto;
 import com.coyjiv.isocial.dto.respone.user.UserProfileResponseDto;
 import com.coyjiv.isocial.dto.respone.user.UserSearchResponseDto;
-import com.coyjiv.isocial.exceptions.EntityNotFoundException;
 import com.coyjiv.isocial.exceptions.PasswordMatchException;
+import com.coyjiv.isocial.service.dia.IDiaService;
 import com.coyjiv.isocial.service.email.EmailServiceImpl;
 import com.coyjiv.isocial.service.userpreference.IUserPreferenceService;
 import com.coyjiv.isocial.transfer.user.UserDefaultResponseMapper;
 import com.coyjiv.isocial.transfer.user.UserProfileResponseDtoMapper;
 import com.coyjiv.isocial.transfer.user.UserRegistrationRequestMapper;
 import com.coyjiv.isocial.transfer.user.UserSearchResponseMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.sentry.Sentry;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -32,12 +35,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ReflectionUtils;
 
+import javax.naming.ServiceUnavailableException;
 import javax.security.auth.login.AccountNotFoundException;
 import java.lang.reflect.Field;
 import java.text.ParseException;
@@ -65,6 +68,7 @@ public class UserService implements IUserService {
   @Value("${HOSTNAME}")
   private String hostname;
   private final PasswordEncoder passwordEncoder;
+  private final IDiaService diaService;
 
 
   @Transactional(readOnly = true)
@@ -91,7 +95,7 @@ public class UserService implements IUserService {
 
   @Transactional(readOnly = true)
   @Override
-  public UserProfileResponseDto findActiveById(Long id) throws EntityNotFoundException {
+  public UserProfileResponseDto findActiveById(Long id) {
     Optional<User> userOptional = userRepository.findActiveById(id);
 
     if (userOptional.isPresent()) {
@@ -356,14 +360,14 @@ public class UserService implements IUserService {
   }
 
   @Override
-  public String getAvatar(Long id) throws EntityNotFoundException {
+  public String getAvatar(Long id) {
     return userRepository.findActiveById(id)
       .map(User::getAvatar)
       .orElseThrow(() -> new EntityNotFoundException("User not found"));
   }
 
   @Override
-  public String getFullName(Long id) throws EntityNotFoundException {
+  public String getFullName(Long id) {
     return userRepository.findActiveById(id)
       .map(User::getFullName)
       .orElseThrow(() -> new EntityNotFoundException("User not found"));
@@ -388,5 +392,20 @@ public class UserService implements IUserService {
     return userRepository.findActiveById(commenterId)
       .map(User::getPremiumEmoji)
       .orElse("");
+  }
+
+  @Override
+  public boolean verify(ValidatePassportRequestDto dto) throws ServiceUnavailableException, JsonProcessingException {
+    User user = userRepository.findById(authProvider.getAuthenticationPrincipal())
+            .orElseThrow(() -> new EntityNotFoundException("NOT FOUND"));
+    boolean res =  diaService.validatePassport(dto);
+    if (res){
+      user.setVerified(true);
+      user.setFirstName(dto.getFirstName());
+      user.setLastName(dto.getLastName());
+      userRepository.save(user);
+      return true;
+    }
+    return false;
   }
 }

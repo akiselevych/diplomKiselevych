@@ -1,8 +1,8 @@
 package com.coyjiv.isocial.resource.rest;
 
-import com.coyjiv.isocial.exceptions.EntityNotFoundException;
 import com.coyjiv.isocial.service.subscriber.ISubscriberService;
 import com.coyjiv.isocial.service.subscriber.ListSubscriberService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,14 +27,14 @@ public class SubscriberController {
   @GetMapping("/subscriptions")
   public ResponseEntity<?> getSubscriptions(@RequestParam(defaultValue = "0") @Min(0) Integer page,
                                             @RequestParam(defaultValue = "10") @Min(0) Integer size)
-          throws EntityNotFoundException {
+          {
     return ResponseEntity.ok(listSubscriberService.getSubscriptions(page,size));
   }
 
   @GetMapping("/subscribed")
   public ResponseEntity<?> getSubscribers(@RequestParam(defaultValue = "0") @Min(0) Integer page,
                                           @RequestParam(defaultValue = "10") @Min(0) Integer size)
-          throws EntityNotFoundException {
+          {
     return ResponseEntity.ok(listSubscriberService.getSubscribers(page, size));
   }
 }

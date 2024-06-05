@@ -2,7 +2,7 @@ import styles from "./chatMessages.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { fetchChatMessages } from "../../../store/actions/chat";
-import { incrementSelectedChatMessagesPage } from "../../../store/chatSlice";
+import { incrementSelectedChatMessagesPage } from "../../../store/slices/Chat.slice.jsx";
 import { useEffect } from "react";
 import "../Chat.scss";
 import Message from "../Message";
@@ -37,6 +37,14 @@ const ChatMessages = ({ pendingChat = false }) => {
       infiniteWrapper.scrollTo(0, contentHeight);
     }
   };
+
+  useEffect(() => {
+    if (!selectedChat) return;
+    const interval = setInterval(() => {
+      dispatch(fetchChatMessages({ chatId: selectedChat?.id, page: messages.page }));
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [dispatch, selectedChat?.id, messages.page, selectedChat]);
 
   useEffect(() => {
     scrollToBottom();

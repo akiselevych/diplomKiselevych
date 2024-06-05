@@ -42,6 +42,9 @@ public class UserPreferenceController {
     try {
       UserPreference userPreference =
         userPreferenceService.getUserPreferences(emailPasswordAuthProvider.getAuthenticationPrincipal());
+      if (userPreference == null){
+        return ResponseEntity.ok().build();
+      }
       return ResponseEntity.ok(userPreferenceResponseMapper.convertToDto(userPreference));
     } catch (Exception e) {
       Sentry.captureException(e);

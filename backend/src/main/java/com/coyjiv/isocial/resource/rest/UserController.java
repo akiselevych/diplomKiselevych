@@ -1,24 +1,18 @@
 package com.coyjiv.isocial.resource.rest;
 
-import com.coyjiv.isocial.dto.respone.user.UserSearchResponseDto;
-import com.coyjiv.isocial.exceptions.EntityNotFoundException;
+import com.coyjiv.isocial.dto.request.dia.ValidatePassportRequestDto;
+import com.coyjiv.isocial.service.dia.IDiaService;
 import com.coyjiv.isocial.service.user.IUserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.naming.ServiceUnavailableException;
 import java.util.Map;
 
 
@@ -35,7 +29,7 @@ public class UserController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<?> findById(@PathVariable("id") Long id) throws EntityNotFoundException {
+  public ResponseEntity<?> findById(@PathVariable("id") Long id) {
     return ResponseEntity.ok(userService.findActiveById(id));
   }
 
@@ -47,14 +41,21 @@ public class UserController {
 
   @PatchMapping("/{id}")
   public ResponseEntity<?> update(@PathVariable("id") @Min(0) Long id, @RequestBody Map<Object, Object> fields)
-          throws EntityNotFoundException, IllegalAccessException {
+          throws IllegalAccessException {
     userService.update(id, fields);
     return ResponseEntity.status(204).build();
   }
 
+  @PostMapping("/verify")
+  public ResponseEntity<?> verify(@Valid @RequestBody ValidatePassportRequestDto dto)
+          throws ServiceUnavailableException, JsonProcessingException {
+    boolean res = userService.verify(dto);
+    return res ? ResponseEntity.status(201).build() : ResponseEntity.status(400).body("Документи не верифіковані");
+  }
+
   @DeleteMapping("/{id}")
   public ResponseEntity<?> delete(@PathVariable("id") @Min(0) Long id)
-          throws EntityNotFoundException, IllegalAccessException {
+          throws IllegalAccessException {
     userService.delete(id);
     return ResponseEntity.status(204).build();
   }

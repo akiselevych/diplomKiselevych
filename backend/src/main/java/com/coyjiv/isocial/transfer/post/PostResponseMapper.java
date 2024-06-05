@@ -1,26 +1,20 @@
 package com.coyjiv.isocial.transfer.post;
 
 import com.coyjiv.isocial.auth.EmailPasswordAuthProvider;
-import com.coyjiv.isocial.dao.PostRepository;
 import com.coyjiv.isocial.dao.UserRepository;
-import com.coyjiv.isocial.domain.Favorite;
 import com.coyjiv.isocial.domain.Post;
 import com.coyjiv.isocial.domain.User;
-import com.coyjiv.isocial.dto.respone.favorite.FavoriteResponseDto;
 import com.coyjiv.isocial.dto.respone.post.PostResponseDto;
-import com.coyjiv.isocial.exceptions.EntityNotFoundException;
 import com.coyjiv.isocial.service.comment.ICommentService;
 import com.coyjiv.isocial.service.favorite.IFavoriteService;
 import com.coyjiv.isocial.service.like.ILikeService;
 import com.coyjiv.isocial.service.post.IPostService;
-import com.coyjiv.isocial.service.user.IUserService;
 import com.coyjiv.isocial.transfer.DtoMapperFacade;
 import com.coyjiv.isocial.transfer.user.UserSearchResponseMapper;
 import io.sentry.Sentry;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
 
 @Service
 public class PostResponseMapper extends DtoMapperFacade<Post, PostResponseDto> {

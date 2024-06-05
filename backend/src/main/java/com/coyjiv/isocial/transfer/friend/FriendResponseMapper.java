@@ -1,14 +1,11 @@
 package com.coyjiv.isocial.transfer.friend;
 
-import com.coyjiv.isocial.domain.Friend;
 import com.coyjiv.isocial.domain.User;
 
-import com.coyjiv.isocial.dto.respone.friend.FriendNotificationDto;
 import com.coyjiv.isocial.dto.respone.friend.FriendResponseDto;
-import com.coyjiv.isocial.exceptions.EntityNotFoundException;
 import com.coyjiv.isocial.service.chat.IChatService;
 import com.coyjiv.isocial.transfer.DtoMapperFacade;
-import lombok.RequiredArgsConstructor;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service

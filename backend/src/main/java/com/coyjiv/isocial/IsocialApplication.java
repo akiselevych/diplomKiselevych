@@ -9,8 +9,10 @@ import org.springframework.boot.web.server.ErrorPage;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
+@EnableScheduling
 public class IsocialApplication implements ApplicationRunner {
   public static void main(String[] args) {
     SpringApplication.run(IsocialApplication.class, args);

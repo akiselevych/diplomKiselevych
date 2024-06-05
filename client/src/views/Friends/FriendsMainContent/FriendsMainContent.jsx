@@ -12,7 +12,7 @@ import { MainContentWrapper } from './FriendsMainContent.styled'
 import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 import { useNavigate } from 'react-router-dom'
-import { setPendingChat } from '../../../store/chatSlice'
+import { setPendingChat } from '../../../store/slices/Chat.slice.jsx'
 import { userAvatar } from '../../../data/placeholders'
 
 const FriendsMainContent = ({ hidden }) => {

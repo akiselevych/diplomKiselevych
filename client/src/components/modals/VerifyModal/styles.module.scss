@@ -1,0 +1,76 @@
+@import "../../../styles/variables/colors";
+
+.form {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.desc {
+  font-size: 18px;
+  margin-bottom: 18px;
+}
+
+.fields {
+  display: flex;
+  justify-content: space-around;
+  margin: 0 auto 20px;
+}
+.column{
+  flex-direction: column;
+}
+.inputField {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  input {
+    padding: 4px;
+    border-radius: 8px;
+    outline: none;
+    border: 1px solid gray;
+  }
+}
+
+.submitBtn {
+  padding: 10px 12px;
+  border-radius: 8px;
+  background-color: $primaryButtonBackground;
+  color: whitesmoke;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+
+  &:disabled{
+    background-color: gray;
+    cursor: not-allowed;
+  }
+}
+
+.btns{
+  width: fit-content;
+  margin: 0 auto;
+  display: flex;
+  gap: 12px;
+}
+
+.errorWrapper{
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.error{
+  text-align: center;
+  color: red;
+  font-weight: bold;
+  font-size: 18px;
+}

@@ -1,45 +1,48 @@
-import { useState } from 'react'
+import {useState} from 'react'
 
 import PropTypes from 'prop-types'
 
 import MediaUpload from "../../../components/modals/MediaUpload"
 import AvatarMenu from "../AvatarMenu"
 import ProfileTabs from "../ProfileTabs"
-import { ProfileBackButton, WhiteButton } from '../../../components/buttons'
+import {ProfileBackButton, WhiteButton} from '../../../components/buttons'
 import FriendRequestButton from "../FriendRequestButton"
-import { EditProfile } from "../../../components/modals/EditProfile"
+import {EditProfile} from "../../../components/modals/EditProfile"
 
-import { useGetProfileByIdQuery } from '../../../store/services/profileService'
+import {useGetProfileByIdQuery, useUpdateProfileMutation} from '../../../store/services/profileService'
 
 
-import { Box, Typography, Button, Stack, Container, Divider, useTheme } from '@mui/material'
-import { useMediaQuery } from 'usehooks-ts';
+import {Box, Typography, Button, Stack, Container, Divider, useTheme} from '@mui/material'
+import {useMediaQuery} from 'usehooks-ts';
 
-import { userAvatar } from "../../../data/placeholders"
+import {userAvatar} from "../../../data/placeholders"
 
-import { MdPhotoCamera } from "react-icons/md"
-import { NotificationSubscriptionBtn } from '../NotificationSubscriptionBtn'
+import {MdPhotoCamera} from "react-icons/md"
+import {NotificationSubscriptionBtn} from '../NotificationSubscriptionBtn'
 import styles from '../profile.module.scss'
-import { Link, useNavigate } from 'react-router-dom'
-import { useGetChatIdQuery } from '../../../store/services/chatService'
-import { useDispatch } from 'react-redux'
-import { setPendingChat } from '../../../store/chatSlice'
+import {Link, useNavigate} from 'react-router-dom'
+import {useGetChatIdQuery} from '../../../store/services/chatService'
+import {useDispatch} from 'react-redux'
+import {setPendingChat} from '../../../store/slices/Chat.slice.jsx'
 import moment from 'moment'
+import VerifyModal from "../../../components/modals/VerifyModal/VerifyModal.jsx";
+import {instance} from "../../../api/index.js";
 
 
-export const ProfileLayout = ({ id }) => {
+export const ProfileLayout = ({id}) => {
     const theme = useTheme()
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const { data: profile } = useGetProfileByIdQuery(id ?? localStorage.getItem('userId'));
+    const {data: profile} = useGetProfileByIdQuery(id ?? localStorage.getItem('userId'));
 
     const isPersonalProfile = !id || id === localStorage.getItem('userId');
-    const { data: chatId } = useGetChatIdQuery(id, { skip: isPersonalProfile })
+    const {data: chatId} = useGetChatIdQuery(id, {skip: isPersonalProfile})
 
 
     const [isProfileEditOpen, setIsProfileEditOpen] = useState(false)
     const [isBannerUploadOpen, setIsBannerUploadOpen] = useState(false)
+    const [isVerifyOpen, setIsVerifyOpen] = useState(false)
     const isMobile = useMediaQuery('(max-width: 480px)')
     const isLargeMobile = useMediaQuery('(max-width: 600px)')
 
@@ -71,42 +74,107 @@ export const ProfileLayout = ({ id }) => {
     }
     const lastSeen = moment(profile?.lastSeen).fromNow();
 
+    const [updateProfile] = useUpdateProfileMutation(id);
+
+    const becomeVolunteer = async () => {
+        await instance.post('volunteers');
+        updateProfile({
+            body: {
+                is_volunteer: true
+            }, id
+        });
+    }
 
     return (
         <Box>
             <ProfileBackButton
                 onClick={() => navigate(-1)}
             />
-            <Container maxWidth={'lg'} >
-                <Box sx={{ borderRadius: '10px', position: 'relative', overflow: 'clip', minHeight: '351px', backgroundColor: profile?.bannerUrl ? theme.palette.lightGrey : 'mediumpurple' }}>
-                    {profile?.bannerUrl && <img src={profile?.bannerUrl} alt='user profile banner' style={{ width: '100%', height: '351px', objectFit: 'cover' }} />}
-                    {isPersonalProfile && <WhiteButton onClick={onOpenBannerUpload} className={styles.buttonWhite}><MdPhotoCamera /> {!isMobile && (profile?.bannerUrl ? "Change banner" : "Upload banner")}</WhiteButton>}
+            <Container maxWidth={'lg'}>
+                <Box sx={{
+                    borderRadius: '10px',
+                    position: 'relative',
+                    overflow: 'clip',
+                    minHeight: '351px',
+                    backgroundColor: profile?.bannerUrl ? theme.palette.lightGrey : 'mediumpurple'
+                }}>
+                    {profile?.bannerUrl && <img src={profile?.bannerUrl} alt='user profile banner'
+                                                style={{width: '100%', height: '351px', objectFit: 'cover'}}/>}
+                    {isPersonalProfile && <WhiteButton onClick={onOpenBannerUpload}
+                                                       className={styles.buttonWhite}><MdPhotoCamera/> {!isMobile && (profile?.bannerUrl ? "Change banner" : "Upload banner")}
+                    </WhiteButton>}
                 </Box>
-                <Container sx={{ px: '5px' }}>
-                    <Stack direction={{ xs: 'column', sm: 'row' }} rowGap={{ xs: 0, sm: '40px', md: 0 }} flexWrap={{ sm: 'wrap', lg: 'nowrap' }} justifyContent={'start'} alignItems={'center'} spacing={2} sx={{ translate: '0px -30px', marginBottom: '-10px' }}>
-                        <AvatarMenu avatarUrl={userAvatar(profile)} />
-                        <Stack spacing={-1} style={{ marginTop: '30px' }}>
-                            <Typography variant='h4' sx={{ fontWeight: 900, textAlign: { xs: 'center', sm: 'inherit' }, color: theme.palette.black, fontSize: 32 }}>
+                <Container sx={{px: '5px'}}>
+                    <Stack direction={{xs: 'column', sm: 'row'}} rowGap={{xs: 0, sm: '40px', md: 0}}
+                           flexWrap={{sm: 'wrap', lg: 'nowrap'}} justifyContent={'start'} alignItems={'center'}
+                           spacing={2} sx={{translate: '0px -30px', marginBottom: '-10px'}}>
+                        <AvatarMenu avatarUrl={userAvatar(profile)} isVerified={profile.verified}
+                                    isVolunteer={profile.is_volunteer}/>
+                        <Stack spacing={-1} style={{marginTop: '30px'}}>
+                            <Typography variant='h4' sx={{
+                                fontWeight: 900,
+                                textAlign: {xs: 'center', sm: 'inherit'},
+                                color: theme.palette.black,
+                                fontSize: 32
+                            }}>
                                 {profile?.firstName + " " + profile?.lastName}
                             </Typography>
-                            <Typography variant='h5' sx={{ '& > a:hover': { textDecoration: 'underline' }, fontWeight: 500, color: theme.palette.greyColor, fontSize: 15, textAlign: (isMobile || isLargeMobile) ? 'center' : 'left' }} style={{ marginTop: '8px' }}>
+                            <Typography variant='h5' sx={{
+                                '& > a:hover': {textDecoration: 'underline'},
+                                fontWeight: 500,
+                                color: theme.palette.greyColor,
+                                fontSize: 15,
+                                textAlign: (isMobile || isLargeMobile) ? 'center' : 'left'
+                            }} style={{marginTop: '8px'}}>
                                 <Link to={'?tab=Friends'}>
-                                    friends: {profile?.friendsCount} | last seen {lastSeen}
+                                    friends: {profile?.friendsCount} {lastSeen && profile?.lastSeen && `| last seen ${lastSeen}`}
                                 </Link>
                             </Typography>
                         </Stack>
-                        <Stack direction={'row'} marginTop={{ xs: 0, md: 30, lg: 0 }} spacing={1} className={styles.profileActions}>
-                            <FriendRequestButton isPersonalProfile={isPersonalProfile} profile={profile} id={id} />
-                            <Button onClick={isPersonalProfile ? openProfileEdit : openMessenger} variant='outlined' sx={{ width: '180px', height: '36px', fontSize: 14 }}>{isPersonalProfile ? "Edit Profile" : "Send message"}</Button>
-                            {!isPersonalProfile && <NotificationSubscriptionBtn />}
+                        <Stack direction={'row'} marginTop={{xs: 0, md: 30, lg: 0}} spacing={1}
+                               className={styles.profileActions}>
+                            <FriendRequestButton isPersonalProfile={isPersonalProfile} profile={profile} id={id}/>
+                            <Button onClick={isPersonalProfile ? openProfileEdit : openMessenger} variant='outlined'
+                                    sx={{
+                                        width: '180px',
+                                        height: '36px',
+                                        fontSize: 14
+                                    }}>{isPersonalProfile ? "Edit Profile" : "Send message"}</Button>
+                            {isPersonalProfile && !profile.verified && <Button variant='outlined'
+                                                                               onClick={() => setIsVerifyOpen(true)}
+                                                                               sx={{
+                                                                                   width: '180px',
+                                                                                   height: '36px',
+                                                                                   fontSize: 14
+                                                                               }}>Верифікуватися</Button>}
+                            {isPersonalProfile && profile.verified && !profile.is_volunteer &&
+                                <Button variant='outlined'
+                                        onClick={() => becomeVolunteer()}
+                                        sx={{
+                                            width: '180px',
+                                            height: '36px',
+                                            fontSize: 14
+                                        }}>Стати волонтером</Button>}
+                            {!isPersonalProfile && <NotificationSubscriptionBtn/>}
                         </Stack>
                     </Stack>
-                    <Divider />
+                    <Divider/>
                 </Container>
             </Container>
-            <ProfileTabs />
-            {profile && <EditProfile open={isProfileEditOpen} onClose={() => setIsProfileEditOpen(false)} profile={profile} />}
-            {isPersonalProfile && <MediaUpload customOptions={{ aspect: 16 / 9, minWidth: 355, width: 355, height: 200, minHeight: 200, x: 25, y: 25, field: 'banner' }} open={isBannerUploadOpen} onClose={onCloseBannerUpload} modalTitle="Upload a new banner" />}
+            <ProfileTabs isVolunteer={profile.is_volunteer}/>
+            {profile &&
+                <EditProfile open={isProfileEditOpen} onClose={() => setIsProfileEditOpen(false)} profile={profile}/>}
+            {isVerifyOpen && <VerifyModal open={isVerifyOpen} onClose={() => setIsVerifyOpen(false)} id={profile.id}/>}
+            {isPersonalProfile && <MediaUpload customOptions={{
+                aspect: 16 / 9,
+                minWidth: 355,
+                width: 355,
+                height: 200,
+                minHeight: 200,
+                x: 25,
+                y: 25,
+                field: 'banner'
+            }} open={isBannerUploadOpen} onClose={onCloseBannerUpload} modalTitle="Upload a new banner"/>}
         </Box>
     )
 }

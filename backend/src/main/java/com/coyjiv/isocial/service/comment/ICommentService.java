@@ -3,9 +3,7 @@ package com.coyjiv.isocial.service.comment;
 import com.coyjiv.isocial.dto.request.comment.DefaultCommentRequestDto;
 import com.coyjiv.isocial.dto.respone.comment.CommentResponseDto;
 import com.coyjiv.isocial.dto.respone.page.PageWrapper;
-import com.coyjiv.isocial.exceptions.EntityNotFoundException;
-
-import java.util.List;
+import jakarta.persistence.EntityNotFoundException;
 
 public interface ICommentService {
 
@@ -22,7 +20,7 @@ public interface ICommentService {
 
   CommentResponseDto create(Long postId, DefaultCommentRequestDto dto) throws EntityNotFoundException;
 
-  CommentResponseDto update(Long id, DefaultCommentRequestDto dto) throws EntityNotFoundException, IllegalAccessException;
+  CommentResponseDto update(Long id, DefaultCommentRequestDto dto) throws IllegalAccessException;
 
   PageWrapper<CommentResponseDto> findRecentByPostId(Long id) throws EntityNotFoundException;
 }

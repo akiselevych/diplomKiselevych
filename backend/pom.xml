@@ -126,6 +126,11 @@
             <artifactId>guava</artifactId>
             <version>33.0.0-jre</version>
         </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20240303</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -140,27 +145,6 @@
                         </exclude>
                     </excludes>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.0.0</version>
-                <executions>
-                    <execution>
-                        <id>validate</id>
-                        <phase>validate</phase>
-                        <configuration>
-                            <configLocation>./checkstyle_config.xml</configLocation>
-                            <encoding>utf-8</encoding>
-                            <consoleOutput>true</consoleOutput>
-                            <failsOnError>true</failsOnError>
-                            <violationSeverity>warning</violationSeverity>
-                        </configuration>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
@@ -181,40 +165,6 @@
                                 </resource>
                             </resources>
                         </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>io.sentry</groupId>
-                <artifactId>sentry-maven-plugin</artifactId>
-                <version>0.0.7</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <!-- for showing output of sentry-cli -->
-                    <debugSentryCli>true</debugSentryCli>
-
-                    <org>isocial</org>
-
-                    <project>java-spring-boot</project>
-
-                    <!-- provide your auth token via SENTRY_AUTH_TOKEN environment variable -->
-                    <authToken>${env.SENTRY_AUTH_TOKEN}</authToken>
-                    <skip>false</skip>
-                    <skipSourceBundle>false</skipSourceBundle>
-                    <skipAutoInstall>false</skipAutoInstall>
-                    <skipTelemetry>false</skipTelemetry>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <!--
-                            Generates a JVM (Java, Kotlin, etc.) source bundle and uploads your source code to Sentry.
-                            This enables source context, allowing you to see your source
-                            code as part of your stack traces in Sentry.
-                            -->
-                            <goal>uploadSourceBundle</goal>
-                            <goal>reportDependencies</goal>
-                        </goals>
                     </execution>
                 </executions>
             </plugin>

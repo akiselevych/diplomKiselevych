@@ -5,20 +5,15 @@ import com.coyjiv.isocial.dao.CommentRepository;
 import com.coyjiv.isocial.dao.PostRepository;
 import com.coyjiv.isocial.dao.UserRepository;
 import com.coyjiv.isocial.domain.Comment;
-import com.coyjiv.isocial.domain.NotificationEvent;
 import com.coyjiv.isocial.domain.Post;
-import com.coyjiv.isocial.domain.User;
 import com.coyjiv.isocial.dto.request.comment.DefaultCommentRequestDto;
 import com.coyjiv.isocial.dto.respone.comment.CommentResponseDto;
 import com.coyjiv.isocial.dto.respone.page.PageWrapper;
-import com.coyjiv.isocial.dto.respone.post.PostResponseDto;
-import com.coyjiv.isocial.exceptions.EntityNotFoundException;
 import com.coyjiv.isocial.service.notifications.INotificationService;
-import com.coyjiv.isocial.service.user.IUserService;
 import com.coyjiv.isocial.service.websocket.IWebsocketService;
 import com.coyjiv.isocial.transfer.comment.CommentResponseMapper;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.action.internal.EntityActionVetoException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -43,7 +38,7 @@ public class CommentService implements ICommentService {
 
   @Transactional(readOnly = true)
   @Override
-  public CommentResponseDto findById(Long id) throws EntityNotFoundException {
+  public CommentResponseDto findById(Long id) {
     Optional<Comment> comment = commentRepository.findById(id);
     if (comment.isPresent()) {
       return commentResponseMapper.convertToDto(comment.get());
@@ -54,7 +49,7 @@ public class CommentService implements ICommentService {
 
   @Transactional(readOnly = true)
   @Override
-  public PageWrapper<CommentResponseDto> findByPostId(Long id, int page, int size) throws EntityNotFoundException {
+  public PageWrapper<CommentResponseDto> findByPostId(Long id, int page, int size) {
     if (postRepository.findActiveById(id).isPresent()) {
       Sort sort = Sort.by(new Sort.Order(Sort.Direction.ASC, "id"));
       Pageable pageable = PageRequest.of(page, size, sort);
@@ -89,7 +84,7 @@ public class CommentService implements ICommentService {
 
   @Transactional(readOnly = true)
   @Override
-  public Long countByPostId(Long id) throws EntityNotFoundException {
+  public Long countByPostId(Long id) {
     return commentRepository.countByPostId(id);
   }
 
@@ -114,7 +109,7 @@ public class CommentService implements ICommentService {
 
   @Transactional
   @Override
-  public CommentResponseDto create(Long postId, DefaultCommentRequestDto dto) throws EntityNotFoundException {
+  public CommentResponseDto create(Long postId, DefaultCommentRequestDto dto) {
     Post post = postRepository.findById(postId)
             .orElseThrow(() -> new EntityNotFoundException("Post not found"));
     Comment comment = new Comment(emailPasswordAuthProvider.getAuthenticationPrincipal(), postId, dto.getText(), false);
@@ -127,7 +122,7 @@ public class CommentService implements ICommentService {
   @Transactional
   @Override
   public CommentResponseDto update(Long id, DefaultCommentRequestDto dto)
-          throws EntityNotFoundException, IllegalAccessException {
+          throws IllegalAccessException {
     Optional<Comment> comment = commentRepository.findById(id);
     if (comment.isPresent()) {
       if (postRepository.findActiveById(comment.get().getPostId()).isPresent()) {
@@ -147,7 +142,7 @@ public class CommentService implements ICommentService {
   }
 
   @Override
-  public PageWrapper<CommentResponseDto> findRecentByPostId(Long id) throws EntityNotFoundException {
+  public PageWrapper<CommentResponseDto> findRecentByPostId(Long id) {
     if (postRepository.findActiveById(id).isPresent()) {
       Sort sort = Sort.by(new Sort.Order(Sort.Direction.ASC, "id"));
       Pageable pageable = PageRequest.of(0, 5, sort);
